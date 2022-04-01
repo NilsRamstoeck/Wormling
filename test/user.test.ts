@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import {createUser, database} from '../src/modules/user';
+import {retrieveUser, createUser, database} from '../src/modules/user';
 
 describe('User module', () => {
 
@@ -22,15 +22,23 @@ describe('User module', () => {
                return;
             };
             expect(users.length).to.equal(1, 'expect only 1 user');
-            expect(users[0]?.username).to.equal(userData.username, 'expect username to be the same');
-            expect(users[0]?.password).to.equal(userData.password, 'expect password to be the same');
+            expect(users[0].username).to.equal(userData.username, 'expect username to be the same');
+            expect(users[0].password).to.equal(userData.password, 'expect password to be the same');
             done();
          });
       })
       .catch((err) => done(err));
    });
 
-   it('can retrieve user');
+   it('can retrieve user', (done) => {
+      retrieveUser({...userData})
+      .then((user) => {
+         expect(user.username).to.equal(userData.username, 'expect username to be the same');
+         expect(user.password).to.equal(userData.password, 'expect password to be the same');
+         done();
+      })
+      .catch((err) => done(err));
+   });
 
    it('can modify user');
 

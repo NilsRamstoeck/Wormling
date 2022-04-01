@@ -60,7 +60,39 @@ describe('Wormling API', () => {
       });
 
       describe('GET', () => {
-         it('can get user');
+         it('fails with bad request', (done) => {
+            request(app)
+            .get('/user')
+            .send()
+            .expect('Content-Type', /json/)
+            .expect(400, done);
+         });
+
+         it('can get user', (done) => {
+            request(app)
+            .get('/user')
+            .send({...userData})
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then((res) => {
+               const user = res.body;
+               expect(user.username).to.equal(userData.username);
+               expect(user.password).to.equal(userData.password);
+               done();
+            })
+            .catch((err) => done(err));
+         });
+
+         it('fails with inexistant user', (done) => {
+            request(app)
+            .get('/user')
+            .send({
+               username: 'JaneDoe'
+            })
+            .expect('Content-Type', /json/)
+            .expect(404, done);
+         });
+
       });
 
       describe('PATCH', () => {

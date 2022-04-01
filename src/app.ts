@@ -1,7 +1,8 @@
 import express from 'express';
 import {HttpError} from '@curveball/http-errors';
 import {
-   createUser
+   createUser,
+   retrieveUser
 } from './modules/user';
 
 
@@ -14,8 +15,12 @@ app.get('/', (_req, res) => {
 });
 
 app.route('/user')
-.get((_req, _res) => {
-
+.get((req, res) => {
+   retrieveUser(req.body)
+   .then((user) => res.status(200).json(user))
+   .catch((err: HttpError) => {
+      res.status(err.httpStatus).json();
+   });
 })
 .put((req, res) => {
    createUser(req.body)
