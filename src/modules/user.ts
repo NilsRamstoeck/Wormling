@@ -72,3 +72,20 @@ export function modifyUser(data: any): Promise<void>{
    });
 }
 
+export function deleteUser(data: any): Promise<void>{
+   return new Promise((resolve, reject) => {
+      const username = data?.username;
+
+      if(!username){
+         reject(new BadRequest);
+         return;
+      }
+
+      database.usersCollection.remove({
+         username
+      }, {}, (err, n) => {
+         if(!err && n) resolve();
+         else reject(new NotFound);
+      });
+   });
+}

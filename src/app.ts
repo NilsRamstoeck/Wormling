@@ -38,6 +38,10 @@ app.route('/user')
       res.status(err.httpStatus).json();
    });
 })
-.delete((_req, _res) => {
-
+.delete((req, res) => {
+   deleteUser(req.body)
+   .then(() => res.status(200).json())
+   .catch((err: HttpError) => {
+      res.status(err.httpStatus).json();
+   });
 });

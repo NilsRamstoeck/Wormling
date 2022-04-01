@@ -116,10 +116,10 @@ describe('Wormling API', () => {
             .expect(200)
             .then(async () => {
                const res = await request(app)
-                  .get('/user')
-                  .send({ ...userData })
-                  .expect('Content-Type', /json/)
-                  .expect(200);
+               .get('/user')
+               .send({ ...userData })
+               .expect('Content-Type', /json/)
+               .expect(200);
                const user = res.body;
                expect(user.username).to.equal(userData.username);
                expect(user.password).to.equal('newPassword');
@@ -142,16 +142,47 @@ describe('Wormling API', () => {
       });
 
       describe('DELETE', () => {
-         it('fails with bad request');
-         it('can delete user');
-         it('fails with inexistant user');
+         it('fails with bad request', (done) => {
+            request(app)
+            .delete('/user')
+            .send()
+            .expect(400, done);
+         });
+
+         it('can delete user', (done) => {
+            request(app)
+            .delete('/user')
+            .send({
+               username: userData.username
+            })
+            .expect(200)
+            .then(async () => {
+               const res = await request(app)
+               .get('/user')
+               .send({ ...userData })
+               .expect('Content-Type', /json/)
+               .expect(404);
+               done();
+            })
+            .catch((err) => done(err));
+         });
+
+         it('fails with inexistant user', (done) => {
+            request(app)
+            .delete('/user')
+            .send({
+               username: 'JaneDoe',
+               newData: {
+                  password: 'newPassword'
+               }
+            })
+            .expect(404, done);
+         });
       })
 
    });
 
    after(() => {
-      console.log('CLEANUP APP');
-
       database.usersCollection.remove({
          username: userData.username
       });

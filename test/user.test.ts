@@ -1,6 +1,6 @@
 import { HttpError } from '@curveball/http-errors/dist';
 import {expect} from 'chai';
-import {retrieveUser, createUser, database, modifyUser} from '../src/modules/user';
+import {retrieveUser, createUser, database, modifyUser, deleteUser} from '../src/modules/user';
 
 describe('User module', () => {
 
@@ -28,7 +28,7 @@ describe('User module', () => {
             done();
          });
       })
-      .catch((err) => done(err));
+      .catch((err: HttpError) => done(err.httpStatus));
    });
 
    it('can retrieve user', (done) => {
@@ -38,7 +38,7 @@ describe('User module', () => {
          expect(user.password).to.equal(userData.password, 'expect password to be the same');
          done();
       })
-      .catch((err) => done(err));
+      .catch((err: HttpError) => done(err.httpStatus));
    });
 
    it('can modify user', (done) => {
@@ -59,7 +59,20 @@ describe('User module', () => {
       .catch((err: HttpError) => done(err.httpStatus));
    });
 
-   it('can delete user');
+   it('can delete user', (done) => {
+      deleteUser({...userData})
+      .then(() => {
+         retrieveUser({...userData})
+         .then(() => {
+            done(new Error('User should be deleted'));
+         })
+         .catch((err: HttpError) => {
+            expect(err.httpStatus).to.equal(404);
+            done();
+         });
+      })
+      .catch((err: HttpError) => done(err.httpStatus));
+   });
 
    after(() => {
       database.usersCollection.remove({
