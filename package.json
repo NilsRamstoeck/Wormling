@@ -9,7 +9,7 @@
       "build": "tsc",
       "prerun": "npm run build",
       "run": "nodemon",
-      "test": "cross-env IS_TEST=false ts-mocha -p test.tsconfig.json test/*.test.ts --verbose"
+      "test": "cross-env IS_TEST=true ts-mocha -p test.tsconfig.json test/*.test.ts --verbose"
    },
    "repository": {
       "type": "git",
@@ -38,6 +38,7 @@
       "typescript": "^4.6.3"
    },
    "dependencies": {
+      "@curveball/http-errors": "^0.4.1",
       "express": "^4.17.3",
       "nedb": "^1.8.0"
    }

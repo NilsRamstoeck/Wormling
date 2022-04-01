@@ -5,11 +5,27 @@ const appdata = process.env.APPDATA ||
 process.env.HOME + '/Library/Preferences' :
 process.env.HOME + "/.local/share");
 
+export class WormlingDB {
+   usersCollection!: Datastore<any>;
 
-const db_config = {
-   filename: `${appdata}/Wormling/database`,
-   autoload: true
+   constructor(){
+      this.loadCollections()
+   }
+
+   private loadCollections(){
+      this.usersCollection = new Datastore({
+         filename: `${appdata}/Wormling/users.db`,
+         autoload: true
+      });
+
+      this.usersCollection.ensureIndex({
+         fieldName: 'username',
+         unique: true
+      }, (err) => {
+         if(!err)return;
+
+      })
+
+   }
+
 }
-//Create in-memory database when testing, load file when in production
-const IS_TEST = false;//process.env.IS_TEST == 'true' ? true : false;
-export const database = new Datastore(IS_TEST ? db_config : undefined);
