@@ -96,11 +96,55 @@ describe('Wormling API', () => {
       });
 
       describe('PATCH', () => {
-         it('can modify user');
+
+         it('fails with bad request', (done) => {
+            request(app)
+            .patch('/user')
+            .send()
+            .expect(400, done);
+         });
+
+         it('can modify user', (done) => {
+            request(app)
+            .patch('/user')
+            .send({
+               username: userData.username,
+               newData: {
+                  password: 'newPassword'
+               }
+            })
+            .expect(200)
+            .then(async () => {
+               const res = await request(app)
+                  .get('/user')
+                  .send({ ...userData })
+                  .expect('Content-Type', /json/)
+                  .expect(200);
+               const user = res.body;
+               expect(user.username).to.equal(userData.username);
+               expect(user.password).to.equal('newPassword');
+               done();
+            })
+            .catch((err) => done(err));
+         });
+
+         it('fails with inexistant user', (done) => {
+            request(app)
+            .patch('/user')
+            .send({
+               username: 'JaneDoe',
+               newData: {
+                  password: 'newPassword'
+               }
+            })
+            .expect(404, done);
+         });
       });
 
       describe('DELETE', () => {
+         it('fails with bad request');
          it('can delete user');
+         it('fails with inexistant user');
       })
 
    });

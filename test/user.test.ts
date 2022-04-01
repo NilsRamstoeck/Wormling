@@ -1,5 +1,6 @@
+import { HttpError } from '@curveball/http-errors/dist';
 import {expect} from 'chai';
-import {retrieveUser, createUser, database} from '../src/modules/user';
+import {retrieveUser, createUser, database, modifyUser} from '../src/modules/user';
 
 describe('User module', () => {
 
@@ -40,7 +41,23 @@ describe('User module', () => {
       .catch((err) => done(err));
    });
 
-   it('can modify user');
+   it('can modify user', (done) => {
+      modifyUser({
+         username: userData.username,
+         newData: {
+            password: 'newPassword'
+         }
+      })
+      .then(() => {
+         return retrieveUser({...userData});
+      })
+      .then((user) => {
+         expect(user.username).to.equal(userData.username, 'expect username to be the same');
+         expect(user.password).to.equal('newPassword', 'expect password to be the new one');
+         done();
+      })
+      .catch((err: HttpError) => done(err.httpStatus));
+   });
 
    it('can delete user');
 

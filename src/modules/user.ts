@@ -44,3 +44,31 @@ export function retrieveUser(data: any): Promise<WormlingUser>{
       });
    });
 }
+
+export function modifyUser(data: any): Promise<void>{
+   return new Promise((resolve, reject) => {
+      const username = data?.username;
+
+      if(!username){
+         reject(new BadRequest);
+         return;
+      }
+
+      const newUserData: any = {};
+
+      if(data.newData?.password){
+         newUserData.password = data.newData.password;
+      }
+
+      database.usersCollection.update({
+         username
+      }, {
+         $set: {...newUserData}
+      }, {}, (err, n) => {
+         if(!err && n) resolve();
+         else reject(new NotFound);
+      });
+
+   });
+}
+

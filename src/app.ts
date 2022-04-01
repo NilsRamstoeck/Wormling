@@ -2,6 +2,8 @@ import express from 'express';
 import {HttpError} from '@curveball/http-errors';
 import {
    createUser,
+   deleteUser,
+   modifyUser,
    retrieveUser
 } from './modules/user';
 
@@ -29,8 +31,12 @@ app.route('/user')
       res.status(err.httpStatus).json();
    });
 })
-.patch((_req, _res) => {
-
+.patch((req, res) => {
+   modifyUser(req.body)
+   .then(() => res.status(200).json())
+   .catch((err: HttpError) => {
+      res.status(err.httpStatus).json();
+   });
 })
 .delete((_req, _res) => {
 
