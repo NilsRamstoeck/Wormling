@@ -8,6 +8,7 @@ process.env.HOME + "/.local/share");
 
 export class WormlingDB {
    usersCollection!: Datastore<any>;
+   bookingsCollection!: Datastore<any>;
 
    constructor(){
       this.loadCollections()
@@ -24,11 +25,14 @@ export class WormlingDB {
          unique: true
       }, (err) => {
          if(!err)return;
-
       })
 
-   }
+      this.bookingsCollection = new Datastore({
+         filename: `${appdata}/Wormling/bookings.db`,
+         autoload: true
+      });
 
+   }
 }
 
 export const database = new WormlingDB();

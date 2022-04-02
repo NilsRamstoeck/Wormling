@@ -9,7 +9,7 @@
       "build": "tsc",
       "prerun": "npm run build",
       "run": "nodemon",
-      "test": "cross-env IS_TEST=true ts-mocha -p test.tsconfig.json test/*.test.ts --verbose"
+      "test": "cross-env IS_TEST=true ts-mocha -p test.tsconfig.json test/tests.ts --verbose"
    },
    "repository": {
       "type": "git",

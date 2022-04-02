@@ -17,8 +17,8 @@ export function createUser(data: any): Promise<void>{
       };
 
       database.usersCollection.insert({
-         username: data.username,
-         password: data.password
+         username,
+         password
       }, (err) => {
          if(!err) resolve();
          else reject(new Conflict());
@@ -36,7 +36,7 @@ export function retrieveUser(data: any): Promise<WormlingUser>{
       }
 
       database.usersCollection.findOne({
-         username: username
+         username
       }, (err, doc) => {
          if(!err && doc) resolve(doc);
          else reject(new NotFound);

@@ -11,7 +11,7 @@ import {
 describe('User module', () => {
 
    const userData = {
-      username: 'JohnDoe_user',
+      username: 'JohnDoe_module_user',
       password: 'password',
    };
 

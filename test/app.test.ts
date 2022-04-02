@@ -23,7 +23,7 @@ describe('Wormling API', () => {
    describe('/user', () => {
 
       const userData = {
-         username: 'JohnDoe_PUT',
+         username: 'JohnDoe_app_user',
          password: 'password',
       };
 
@@ -180,6 +180,76 @@ describe('Wormling API', () => {
             username: userData.username
          });
       })
+
+   });
+
+   describe('/booking', () => {
+
+      // const userData = {
+      //    username: 'JohnDoe_PUT',
+      //    password: 'password',
+      // };
+      //
+      // const bookingData = {
+      //    start: new Date().setTime(new Date().getTime() + 1*1000*60*60).toLocaleString('UTC'),
+      //    end: new Date().setTime(new Date().getTime() + 2*1000*60*60).toLocaleString('UTC'),
+      // }
+
+      describe('PUT', () => {
+
+         // it('fails with bad request', (done) => {
+         //    request(app)
+         //    .put('/booking')
+         //    .send({
+         //    })
+         //    .expect('Content-Type', /json/)
+         //    .expect(400, done);
+         // });
+
+         it('fails with bad request');
+         it('can create booking');
+         it('cannot create duplicate booking');
+
+         // it('can create booking', (done) => {
+         //    request(app)
+         //    .put('/booking')
+         //    .send({
+         //       user: {...userData},
+         //       booking: {...bookingData},
+         //    })
+         //    .expect('Content-Type', /json/)
+         //    .expect(200, done)
+         // });
+         //
+         // it('cannot create duplicate booking', (done) => {
+         //    request(app)
+         //    .put('/booking')
+         //    .send({
+         //       user: {...userData},
+         //       booking: {...bookingData},
+         //    })
+         //    .expect('Content-Type', /json/)
+         //    .expect(409, done);
+         // })
+      });
+
+      describe('GET', () => {
+         it('fails with bad request');
+         it('can retreive booking');
+         it('fails with inexistant booking');
+      });
+
+      describe('PATCH', () => {
+         it('fails with bad request');
+         it('can modify booking');
+         it('fails with inexistant booking');
+      });
+
+      describe('DELETE', () => {
+         it('fails with bad request');
+         it('can delete booking');
+         it('fails with inexistant booking');
+      });
 
    });
 
