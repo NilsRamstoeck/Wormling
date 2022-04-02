@@ -1,13 +1,9 @@
-import {expect} from 'chai';
 import request from 'supertest';
-import {app} from '../src/app';
-import {database} from '../src/modules/user';
-
+import { expect } from 'chai';
+import { app } from '../src/app';
+import { database } from '../src/database';
 
 describe('Wormling API', () => {
-
-   before(() => {
-   });
 
    it('can reach server', (done) => {
       request(app)
@@ -24,13 +20,12 @@ describe('Wormling API', () => {
       });
    });
 
-   const userData = {
-      username: 'JohnDoe_PUT',
-      password: 'password',
-   };
-
    describe('/user', () => {
 
+      const userData = {
+         username: 'JohnDoe_PUT',
+         password: 'password',
+      };
 
       describe('PUT', () => {
          it('fails with bad request', (done) => {
@@ -157,7 +152,7 @@ describe('Wormling API', () => {
             })
             .expect(200)
             .then(async () => {
-               const res = await request(app)
+               await request(app)
                .get('/user')
                .send({ ...userData })
                .expect('Content-Type', /json/)
@@ -180,12 +175,12 @@ describe('Wormling API', () => {
          });
       })
 
-   });
+      after(() => {
+         database.usersCollection.remove({
+            username: userData.username
+         });
+      })
 
-   after(() => {
-      database.usersCollection.remove({
-         username: userData.username
-      });
-   })
+   });
 
 });

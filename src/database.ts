@@ -5,6 +5,7 @@ const appdata = process.env.APPDATA ||
 process.env.HOME + '/Library/Preferences' :
 process.env.HOME + "/.local/share");
 
+
 export class WormlingDB {
    usersCollection!: Datastore<any>;
 
@@ -29,3 +30,5 @@ export class WormlingDB {
    }
 
 }
+
+export const database = new WormlingDB();

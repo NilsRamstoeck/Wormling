@@ -1,6 +1,12 @@
 import { HttpError } from '@curveball/http-errors/dist';
-import {expect} from 'chai';
-import {retrieveUser, createUser, database, modifyUser, deleteUser} from '../src/modules/user';
+import { expect } from 'chai';
+import { database } from '../src/database';
+import {
+   retrieveUser,
+   createUser,
+   modifyUser,
+   deleteUser
+} from '../src/modules/user';
 
 describe('User module', () => {
 

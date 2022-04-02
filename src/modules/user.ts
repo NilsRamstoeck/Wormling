@@ -1,18 +1,17 @@
 import type { WormlingUser } from '../wormling';
-
 import {
    BadRequest,
    Conflict,
    NotFound
 } from '@curveball/http-errors';
-
-import {WormlingDB} from '../database';
-
-export const database = new WormlingDB();
+import { database } from '../database';
 
 export function createUser(data: any): Promise<void>{
-   return new Promise((resolve, reject) => {
-      if(!(data.username && data.password)) {
+   return new Promise<void>((resolve, reject) => {
+      const username = data?.username;
+      const password = data?.password;
+
+      if(!(username && password)) {
          reject(new BadRequest());
          return;
       };
@@ -28,7 +27,7 @@ export function createUser(data: any): Promise<void>{
 }
 
 export function retrieveUser(data: any): Promise<WormlingUser>{
-   return new Promise((resolve, reject) => {
+   return new Promise<WormlingUser>((resolve, reject) => {
       const username = data?.username;
 
       if(!username){
@@ -46,7 +45,7 @@ export function retrieveUser(data: any): Promise<WormlingUser>{
 }
 
 export function modifyUser(data: any): Promise<void>{
-   return new Promise((resolve, reject) => {
+   return new Promise<void>((resolve, reject) => {
       const username = data?.username;
 
       if(!username){
@@ -73,7 +72,7 @@ export function modifyUser(data: any): Promise<void>{
 }
 
 export function deleteUser(data: any): Promise<void>{
-   return new Promise((resolve, reject) => {
+   return new Promise<void>((resolve, reject) => {
       const username = data?.username;
 
       if(!username){

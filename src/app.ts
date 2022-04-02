@@ -1,5 +1,6 @@
 import express from 'express';
 import {HttpError} from '@curveball/http-errors';
+import { HttpError } from '@curveball/http-errors';
 import {
    createUser,
    deleteUser,

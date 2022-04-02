@@ -1,4 +1,4 @@
-import {app} from './app';
+import { app } from './app';
 
 const port = 8080;
 export const server = app.listen(port, () => console.log('server started at ' + port));
