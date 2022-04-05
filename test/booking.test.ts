@@ -1,7 +1,7 @@
 import { HttpError } from '@curveball/http-errors';
 import { expect } from 'chai';
 import { database } from '../src/database';
-import { createBooking, retrieveBookings } from '../src/modules/booking';
+import { createBooking, deleteBooking, modifyBooking, retrieveBookings } from '../src/modules/booking';
 
 describe('Booking module', () => {
 
@@ -54,8 +54,49 @@ describe('Booking module', () => {
       .catch((err: HttpError) => done(err.httpStatus));
    });
 
-   it('can modify booking');
-   it('can delete booking');
+   it('can modify booking', (done) => {
+
+      const newBookingData = {
+         start: new Date().setTime(new Date().getTime() + 4*1000*60*60).toLocaleString(),
+         end: new Date().setTime(new Date().getTime() + 5*1000*60*60).toLocaleString(),
+      }
+
+      retrieveBookings({
+         creator: userData.username
+      }).then((bookings) => {
+         return modifyBooking({
+            ...bookings[0],
+            newData: newBookingData
+         });
+      }).then(() => {
+         return retrieveBookings({
+            creator: userData.username
+         });
+      }).then((bookings) => {
+         expect(bookings.length).to.equal(1, 'expect only 1 booking');
+         expect(bookings[0].creator).to.equal(userData.username, 'expect creator to be user');
+         expect(bookings[0].start).to.equal(newBookingData.start, 'expect start to be the same');
+         expect(bookings[0].end).to.equal(newBookingData.end, 'expect end to be the same');
+         done();
+      })
+      .catch((err: HttpError) => done(err.httpStatus));
+   });
+
+   it('can delete booking', (done) => {
+      retrieveBookings({
+         creator: userData.username
+      }).then((bookings) => {
+         return deleteBooking(bookings[0]);
+      }).then(() => {
+         return retrieveBookings({
+            creator: userData.username
+         });
+      }).then((bookings) => {
+         expect(bookings.length).to.equal(1, 'expect only 1 booking');
+         done();
+      })
+      .catch((err: HttpError) => done(err.httpStatus));
+   });
 
    after(() => {
       database.bookingsCollection.remove({

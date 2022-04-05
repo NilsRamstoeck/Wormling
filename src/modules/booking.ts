@@ -40,21 +40,58 @@ export function retrieveBookings(data: any): Promise<any[]> {
          creator
       })
       .exec((err, docs: any[]) => {
-         if(!err && docs.length > 0) resolve(docs);
+         if(!err && docs.length >= 0) resolve(docs);
          else reject(new NotFound);
       });
    });
 
 }
 
-export function modifyBooking(_data: any) {
-   return new Promise<void>((_resolve, reject) => {
-      reject(new NotFound());
+export function modifyBooking(data: any) {
+   return new Promise<void>((resolve, reject) => {
+      const bookingID = data?._id;
+
+      if(!bookingID){
+         reject(new BadRequest);
+         return;
+      }
+
+      const newBookingData: any = {};
+
+      if(data.newData?.start){
+         newBookingData.start = data.newData.start;
+      }
+
+      if(data.newData?.end){
+         newBookingData.end = data.newData.end;
+      }
+
+      database.bookingsCollection.update({
+         _id: bookingID
+      }, {
+         $set: {...newBookingData}
+      }, {}, (err, n) => {
+         if(!err && n) resolve();
+         else reject(new NotFound);
+      });
+
    });
 }
 
-export function deleteBooking(_data: any) {
-   return new Promise<void>((_resolve, reject) => {
-      reject(new NotFound());
+export function deleteBooking(data: any) {
+   return new Promise<void>((resolve, reject) => {
+      const bookingID = data?._id;
+
+      if(!bookingID){
+         reject(new BadRequest);
+         return;
+      }
+
+      database.bookingsCollection.remove({
+         _id: bookingID
+      }, {}, (err, n) => {
+         if(!err && n) resolve();
+         else reject(new NotFound);
+      });
    });
 }
